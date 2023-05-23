@@ -1,0 +1,10 @@
+- model: user.user
+  pk: 1
+  fields:
+    username: admin
+    email: chuongvt@vmodev.com
+    password: pbkdf2_sha256$600000$ADSWNC9Fn6Hht0bQ2cFAgU$Q2aOvyWkT7auWdv9rvcrNyUmxggyd6lfBOIEm7zp+QY=
+    is_active: true
+    is_staff: true
+    created_at: 2023-05-08T19:11:21.389Z
+    updated_at: 2023-05-08T19:11:21.389Z
