@@ -7,14 +7,14 @@ from rest_framework.authentication import BaseAuthentication
 from common.exceptions import Unauthorized
 from common.jwt_manager import JWTManager
 
-AUTH_HEADER_TYPE = (b'Bearer',)
+AUTH_HEADER_TYPE = (b"Bearer",)
 User = get_user_model()
 
 
 class BearerAuthSchema(OpenApiAuthenticationExtension):
-    target_class = 'common.auth.BearerAuthSchema'
+    target_class = "common.auth.BearerAuthSchema"
     match_subclasses = True
-    name = 'Bearer'
+    name = "Bearer"
 
     def __init__(self, name=None):
         name = name if name and isinstance(name, str) else BearerAuthSchema.name
@@ -25,15 +25,14 @@ class BearerAuthSchema(OpenApiAuthenticationExtension):
         return {
             "type": "http",
             "scheme": "Bearer",
-            'name': 'Authorization',
+            "name": "Authorization",
         }
 
 
 class JWTAuth(BaseAuthentication, BearerAuthSchema):
-
     @staticmethod
     def _get_header(request):
-        header = request.META.get('HTTP_AUTHORIZATION')
+        header = request.META.get("HTTP_AUTHORIZATION")
         if isinstance(header, str):
             header = header.encode(HTTP_HEADER_ENCODING)
         return header
@@ -57,7 +56,7 @@ class JWTAuth(BaseAuthentication, BearerAuthSchema):
         if not token:
             return None
         payload = JWTManager.decode_token(token, secret_key=settings.SECRET_KEY)
-        user_id = payload.get('sub')
+        user_id = payload.get("sub")
 
         user = User.objects.filter(id=user_id).first()
         if not user or (user and not user.is_active):

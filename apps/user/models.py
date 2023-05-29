@@ -1,4 +1,5 @@
 from django.db import models
+from common.constants import RolesEnum
 
 from common.models import BaseModel
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -21,8 +22,9 @@ class User(AbstractBaseUser, BaseModel):
     username = models.CharField(max_length=31, unique=True)
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
+    re_token = models.CharField(max_length=255, default="")
+    role = models.CharField(max_length=31, default=RolesEnum.USER.value)
     is_staff = models.BooleanField(default=False)
-    re_token = models.CharField(max_length=255)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
@@ -32,8 +34,8 @@ class User(AbstractBaseUser, BaseModel):
     class Meta:
         db_table = "users"
 
-    def __str__(self):
-        return self.username
+    # def __str__(self):
+    #     return self.username
 
     def has_perm(self, perm, obj=None):
         if self.is_active and self.is_staff:

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
+    "django_rq",
     "apps.user",
     "apps.authen",
 ]
@@ -79,6 +80,52 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "auth_django.wsgi.application"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = (config("MAIL_HOST", cast=str),)
+EMAIL_PORT = (config("MAIL_PORT", cast=str),)
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = (config("MAIL_USER", cast=str),)
+EMAIL_HOST_PASSWORD = (config("MAIL_PASSWORD", cast=str),)
+EMAIL_USE_SSL = False
+
+
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = "chuongpm210@gmail.com"
+# EMAIL_HOST_PASSWORD = "bpkajczwissbzbnm"
+# EMAIL_USE_SSL = False
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+RQ_QUEUES = {
+    "default": {
+        "HOST": "localhost",
+        "PORT": 6379,
+        "DB": 0,
+        "DEFAULT_TIMEOUT": 360,
+    },
+    "high_priority": {
+        "HOST": "localhost",
+        "PORT": 6379,
+        "DB": 0,
+        "DEFAULT_TIMEOUT": 500,
+    },
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 
 # Database
@@ -139,6 +186,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "common.pagination.CustomPagination",
     "PAGE_SIZE": 10,
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
